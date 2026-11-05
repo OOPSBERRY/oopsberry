@@ -13,7 +13,22 @@ let gameCache = {};
 const canvas=document.getElementById('drawCanvas'),ctx=canvas.getContext('2d');
 window.selectRole=selectRole;window.showScreen=showScreen;window.createRoom=createRoom;window.joinRoom=joinRoom;window.startGame=startGame;window.nextRound=nextRound;window.submitAnswer=submitAnswer;window.backToLobby=backToLobby;window.clearCanvas=clearCanvas;window.toggleEraser=toggleEraser;window.undoCanvas=undoCanvas;window.toggleSound=toggleSound;
 
-async function ensureAnonymousAuth(){try{if(!auth.currentUser)await signInAnonymously(auth);myId=auth.currentUser?.uid||myId;localStorage.setItem('gm_uid',myId)}catch(e){console.error(e);alert('익명 로그인에 실패했어. Firebase Authentication > Anonymous 설정을 확인해줘.')}}
+let authPromise=null;
+function ensureAnonymousAuth(){
+if(!authPromise){
+  authPromise=signInAnonymously(auth).then(cred=>{myId=cred.user.uid;localStorage.setItem('gm_uid',myId)}).catch(e=>{authPromise=null;throw e});
+}
+return authPromise;
+}
+function withTimeout(promise,ms){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(Object.assign(new Error('TIMEOUT'),{code:'TIMEOUT'})),ms))])}
+function describeFirebaseError(e){
+const code=String(e?.code||e?.message||'unknown');
+if(/too-many-requests/i.test(code))return `같은 인터넷(IP)에서 로그인 요청이 너무 많아 일시적으로 막혔어요. 잠시 후 다시 시도하거나 휴대폰 핫스팟으로 연결해 보세요.\n\n오류 코드: ${code}`;
+if(/operation-not-allowed|admin-restricted/i.test(code))return `Firebase에서 익명 로그인이 꺼져 있어요. 관리자에게 알려주세요.\n\n오류 코드: ${code}`;
+if(/permission.denied/i.test(code))return `서버가 요청을 거부했어요. 페이지를 새로고침해 보고, 계속되면 이 화면을 관리자에게 보내주세요.\n\n오류 코드: ${code}`;
+if(/network|offline|timeout|unavailable/i.test(code))return `서버에 연결하지 못했어요. 학교 인터넷이나 보안 프로그램이 막고 있을 수 있으니 휴대폰 핫스팟으로 연결해 보세요.\n\n오류 코드: ${code}`;
+return `문제가 생겼어요. 이 화면을 관리자에게 보내주세요.\n\n오류 코드: ${code}`;
+}
 function showScreen(id){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active')}
 function toast(msg){alert(msg)} function todayKey(){return new Date().toISOString().slice(0,10).replace(/-/g,'')}
 function showCenterPopup(title,sub,ms=2200,tone='success'){const p=document.getElementById('centerPopup'),t=document.getElementById('centerPopupTitle'),s=document.getElementById('centerPopupSub');t.textContent=title;s.textContent=sub;p.style.borderColor=tone==='fail'?'#e63946':'#ff8c42';t.style.color=tone==='fail'?'#e63946':'#ff8c42';p.classList.remove('hidden');setTimeout(()=>p.classList.add('hidden'),ms)}
@@ -25,7 +40,7 @@ function showRulesOverlay(){const o=document.getElementById('rulesOverlay'),c=do
 function normalizeForFilter(text){return String(text||'').toLowerCase().replace(/[!@#$%^&*()_+=\-{}\[\]:;"'`,.<>/?\\|~]/g,'').replace(/\s+/g,'')}
 function sanitizeAnswer(text){return String(text||'').replace(/\s+/g,' ').trim()} function containsBannedWord(text){const n=normalizeForFilter(text);return BANNED_PATTERNS.some(rx=>rx.test(n))}
 async function attachPresence(name){const presRef=ref(db,`presence/${myId}`); await set(presRef,{name,ts:Date.now()}); onDisconnect(presRef).remove(); const userRef=ref(db,`stats/users/${myId}`),snap=await get(userRef),user=snap.val(); if(!user?.firstSeen) await runTransaction(ref(db,'stats/counters/totalUsers'),v=>(v||0)+1); if(user?.lastDate!==todayKey()) await runTransaction(ref(db,`stats/counters/daily_${todayKey()}`),v=>(v||0)+1); await update(userRef,{firstSeen:user?.firstSeen||Date.now(),lastDate:todayKey(),name})}
-function loadStats(){addListener('stat_presence',ref(db,'presence'),snap=>{document.getElementById('statOnline').textContent=Object.keys(snap.val()||{}).length});addListener('stat_counters',ref(db,'stats/counters'),snap=>{const v=snap.val()||{};document.getElementById('statTotal').textContent=v.totalUsers||0;document.getElementById('statToday').textContent=v[`daily_${todayKey()}`]||0})}
+async function loadStats(){try{await ensureAnonymousAuth()}catch(e){console.error(e);return}if(myRole!=='teacher'||roomCode)return;addListener('stat_presence',ref(db,'presence'),snap=>{document.getElementById('statOnline').textContent=Object.keys(snap.val()||{}).length},console.error);addListener('stat_counters',ref(db,'stats/counters'),snap=>{const v=snap.val()||{};document.getElementById('statTotal').textContent=v.totalUsers||0;document.getElementById('statToday').textContent=v[`daily_${todayKey()}`]||0},console.error)}
 function selectRole(role){
 myRole=role;
 detachAllListeners();
@@ -41,7 +56,7 @@ if(role==='teacher'){
 }
 }
 function initRefs(){roomRef=ref(db,`rooms/${roomCode}`);playersRef=ref(db,`rooms/${roomCode}/players`);gameRef=ref(db,`rooms/${roomCode}/game`);chatRef=ref(db,`rooms/${roomCode}/chat`);canvasRef=ref(db,`rooms/${roomCode}/canvas`);settingsRef=ref(db,`rooms/${roomCode}/settings`)}
-function addListener(key,targetRef,callback){if(listeners[key])off(listeners[key].targetRef,'value',listeners[key].callback);onValue(targetRef,callback);listeners[key]={targetRef,callback}}
+function addListener(key,targetRef,callback,onError){if(listeners[key])off(listeners[key].targetRef,'value',listeners[key].callback);onValue(targetRef,callback,onError);listeners[key]={targetRef,callback}}
 function detachAllListeners(){Object.values(listeners).forEach(({targetRef,callback})=>off(targetRef,'value',callback));listeners={}}
 async function genUniqueRoomCode(){for(let i=0;i<15;i++){const code=Math.random().toString(36).slice(2,6).toUpperCase();const snap=await get(ref(db,`rooms/${code}/code`));if(!snap.exists())return code}return Math.random().toString(36).slice(2,8).toUpperCase()}
 function parseWords(raw){const pieces=raw.split(/[,\n]/).map(v=>v.trim()).filter(Boolean);return [...new Set(pieces)]}
@@ -65,16 +80,31 @@ timeLimit=parseInt(document.getElementById('timeLimit').value,10),
 words=parseWords(document.getElementById('wordInput').value||'');
 if(!words.length){ toast('제시어를 1개 이상 입력해줘.'); return; }
 soundEnabled=document.getElementById('soundSelect').value==='on';
-myName=teacherName;myRole='teacher';roomCode=await genUniqueRoomCode();initRefs();
-await set(roomRef,{code:roomCode,host:myId,status:'waiting',createdAt:Date.now(),appVersion:APP_VERSION});
-await set(playersRef,{[myId]:{name:teacherName,role:'teacher',isManager:true,score:0,drawCount:0,correctCount:0,joinedAt:Date.now()}});
-await set(settingsRef,{roundCount:words.length,timeLimit,words,appVersion:APP_VERSION});
-await set(gameRef,{status:'waiting',round:0,totalRounds:words.length,drawerId:'',keyword:'',timeLimit,timerStart:0,answeredBy:'',usedWords:[],usedDrawers:[],roundOver:false});
-await set(canvasRef,{data:'',ts:Date.now()});
-localStorage.setItem('gm_session',JSON.stringify({code:roomCode,name:myName,role:myRole,appVersion:APP_VERSION}));
-await attachPresence(myName);
-rulesShownForRoom=false;
-enterWaiting()
+const btn=document.querySelector('[onclick="createRoom()"]'),btnLabel=btn.textContent;
+btn.disabled=true;btn.textContent='방 만드는 중...';
+try{
+  await withTimeout(ensureAnonymousAuth(),15000);
+  myName=teacherName;myRole='teacher';
+  roomCode=await withTimeout(genUniqueRoomCode(),15000);initRefs();
+  await withTimeout((async()=>{
+    await set(roomRef,{code:roomCode,host:myId,status:'waiting',createdAt:Date.now(),appVersion:APP_VERSION});
+    await set(playersRef,{[myId]:{name:teacherName,role:'teacher',isManager:true,score:0,drawCount:0,correctCount:0,joinedAt:Date.now()}});
+    await set(settingsRef,{roundCount:words.length,timeLimit,words,appVersion:APP_VERSION});
+    await set(gameRef,{status:'waiting',round:0,totalRounds:words.length,drawerId:'',keyword:'',timeLimit,timerStart:0,answeredBy:'',usedWords:[],usedDrawers:[],roundOver:false});
+    await set(canvasRef,{data:'',ts:Date.now()});
+    await attachPresence(myName);
+  })(),20000);
+  localStorage.setItem('gm_session',JSON.stringify({code:roomCode,name:myName,role:myRole,appVersion:APP_VERSION}));
+  rulesShownForRoom=false;
+  enterWaiting();
+}catch(e){
+  console.error(e);
+  roomCode='';
+  localStorage.removeItem('gm_session');
+  toast('방을 만들지 못했어요.\n\n'+describeFirebaseError(e));
+}finally{
+  btn.disabled=false;btn.textContent=btnLabel;
+}
 }
 async function joinRoom(){const desiredName=(document.getElementById('studentName').value||'').trim(),code=(document.getElementById('roomCodeInput').value||'').trim().toUpperCase();if(!desiredName)return toast('이름을 입력해줘.');if(!code)return toast('방 코드를 입력해줘.');const roomSnap=await get(ref(db,`rooms/${code}`));if(!roomSnap.exists())return toast('방을 찾을 수 없어.');roomCode=code;initRefs();myRole='student';myName=await resolveUniqueName(code,desiredName);const existingSnap=await get(ref(db,`rooms/${roomCode}/players/${myId}`));if(existingSnap.exists())await update(ref(db,`rooms/${roomCode}/players/${myId}`),{name:myName});else await set(ref(db,`rooms/${roomCode}/players/${myId}`),{name:myName,role:'student',score:0,drawCount:0,correctCount:0,joinedAt:Date.now()});localStorage.setItem('gm_session',JSON.stringify({code:roomCode,name:myName,role:myRole,appVersion:APP_VERSION}));await attachPresence(myName);rulesShownForRoom=false;enterWaiting()}
 async function enterWaiting(){detachAllListeners();showScreen('screenWaiting');document.getElementById('waitingRoomCode').textContent=roomCode;document.getElementById('teacherWaitControls').classList.toggle('hidden',myRole!=='teacher');addListener('waiting_players',playersRef,snap=>{const players=snap.val()||{};window.__playersCache=players;const list=document.getElementById('playerList');list.innerHTML='';Object.entries(players).forEach(([uid,p])=>{const chip=document.createElement('div');chip.className='chip'+(uid===myId?' me':'');chip.textContent=`${p.role==='teacher'?'👩‍🏫':'🧒'} ${p.name}`;list.appendChild(chip)});const studentCount=Object.values(players).filter(p=>p.role==='student').length;document.getElementById('waitingStatus').textContent=`현재 학생 ${studentCount}명 접속 중`;document.getElementById('startBtn').disabled=studentCount<1});addListener('waiting_game',gameRef,snap=>{const g=snap.val();if(!g)return;if(g.status==='playing')enterGame();if(g.status==='result')showResult()})}
@@ -192,4 +222,4 @@ if(game?.status==='playing')enterGame();
 else if(game?.status==='result')showResult();
 else enterWaiting();
 }
-(async function boot(){await ensureAnonymousAuth();await restoreSession()})();
+(async function boot(){try{await ensureAnonymousAuth()}catch(e){console.error(e);toast('로그인에 실패했어요.\n\n'+describeFirebaseError(e));return}try{await restoreSession()}catch(e){console.error(e)}})();
