@@ -1,291 +1,246 @@
-/* ── 기본 리셋 & 폰트 ── */
+/* 색과 기본값 */
+:root{
+  --bg:#f4f1ea;
+  --surface:#fffdf8;
+  --ink:#2b2620;
+  --muted:#7a7064;
+  --line:#e0d8c8;
+  --line-strong:#cbbfa8;
+  --board:#2f4a3a;
+  --board-frame:#5a4632;
+  --accent:#c4553b;
+  --accent-ink:#ffffff;
+  --accent-soft:#f6e3dc;
+  --green:#3d6b4f;
+  --green-soft:#e3ece4;
+  --danger:#b3362b;
+  --radius:8px;
+  --font:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+}
+
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;color:#3d2c1e;font-family:'Noto Sans KR',sans-serif}
-body{min-height:100vh;background:#f0f7e6 url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b5d99c' fill-opacity='0.25'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh;background:var(--bg);color:var(--ink);
+  font-family:var(--font);font-weight:400;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+strong,b{font-weight:400}
 
-/* ── 화면 공통 ── */
-.screen{display:none;min-height:100vh;padding:18px}.screen.active{display:block}
+/* 화면 */
+.screen{display:none;min-height:100vh;padding:24px 16px}
+.screen.active{display:block}
 .wrap{max-width:1280px;margin:0 auto}
+.wrap.narrow{max-width:760px}
+.wrap.center{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 48px)}
 
-/* ── 나무 질감 카드 ── */
+/* 제목 */
+h1,h2,h3{margin:0;font-weight:300;letter-spacing:-.02em}
+h2{font-size:1.9em;margin-bottom:20px}
+h3{font-size:1.15em;margin-bottom:10px;font-weight:400}
+
+/* 카드 */
 .card{
-  background:linear-gradient(160deg,#fffdf4 0%,#fdf3dc 100%);
-  border-radius:22px;
-  padding:20px;
-  box-shadow:0 6px 0 #c9a96e, 0 8px 24px rgba(0,0,0,.13);
-  border:2.5px solid #d4aa70;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:24px;
   margin-bottom:16px;
-  position:relative;
 }
 
-/* ── 제목 ── */
-h1,h2,h3{margin-top:0;font-family:'Jua',sans-serif}
-h1{font-size:2.6em;color:#4a7c3f;text-shadow:2px 3px 0 #b5d99c}
-h2{font-size:1.7em;color:#5c3d1e;border-bottom:3px dashed #d4aa70;padding-bottom:8px;margin-bottom:16px}
-h3{font-size:1.2em;color:#5c3d1e}
-
-/* ── 입력 요소 ── */
-button,input,select,textarea{font:inherit}
+/* 입력 */
+button,input,select,textarea{font:inherit;color:inherit}
+label{display:block;font-size:.88em;color:var(--muted);margin:0 0 6px}
 input,select,textarea{
-  width:100%;padding:14px 16px;
-  border-radius:14px;
-  border:2.5px solid #c9a96e;
-  background:#fffdf4;
-  margin-bottom:10px;
-  font-size:1em;
-  color:#3d2c1e;
-  transition:border .2s;
+  width:100%;padding:12px 14px;margin-bottom:16px;
+  border:1px solid var(--line-strong);border-radius:6px;
+  background:#fff;font-size:1em;font-weight:400;
+  transition:border-color .15s;
 }
-input:focus,select:focus,textarea:focus{outline:none;border-color:#4a7c3f;background:#f6fff0}
-textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
+textarea{min-height:110px;resize:vertical;margin-bottom:6px}
+.code-input{text-transform:uppercase;letter-spacing:.4em;text-align:center;font-size:1.4em;font-weight:300}
 
-/* ── 버튼 ── */
+/* 버튼 */
 button{
-  border:none;border-radius:50px;
-  padding:14px 22px;cursor:pointer;font-weight:700;
-  font-family:'Jua',sans-serif;font-size:1em;
-  letter-spacing:.5px;
-  transition:transform .12s, box-shadow .12s;
-  position:relative;top:0;
+  border:1px solid transparent;border-radius:6px;
+  padding:12px 20px;cursor:pointer;font-size:1em;font-weight:400;
+  transition:background-color .15s,border-color .15s,opacity .15s;
 }
-button:active{transform:translateY(3px);box-shadow:none!important}
-.btn-primary{background:#ff8c42;color:#fff;box-shadow:0 5px 0 #c45e1a}
-.btn-secondary{background:#5bbfb5;color:#fff;box-shadow:0 5px 0 #3a8a82}
-.btn-gray{background:#d9c9a3;color:#5c3d1e;box-shadow:0 5px 0 #b0996a}
-.btn-green{background:#5aac44;color:#fff;box-shadow:0 5px 0 #3a7a2c}
+button:disabled{opacity:.45;cursor:default}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover:not(:disabled){background:#ad4931}
+.btn-line{background:transparent;border-color:var(--ink);color:var(--ink)}
+.btn-line:hover{background:var(--ink);color:var(--surface)}
+.btn-quiet{background:transparent;border-color:var(--line-strong);color:var(--ink)}
+.btn-quiet:hover{border-color:var(--ink)}
+.btn-quiet.active{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.btn-small{padding:6px 12px;font-size:.88em}
 
-/* ── 그리드 ── */
-.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.actions.centered{justify-content:center}
 
-/* ── 역할 버튼 ── */
-.role-buttons{display:grid;gap:12px;max-width:460px}
-.role-buttons button{padding:20px;font-size:1.2em}
-
-/* ── 방 코드 ── */
-.room-code{
-  font-size:46px;letter-spacing:10px;font-weight:800;
-  font-family:'Jua',sans-serif;
-  text-align:center;color:#fff;
-  background:#4a7c3f;
-  border-radius:18px;
-  padding:16px 24px;
-  box-shadow:0 6px 0 #2f5228, inset 0 2px 6px rgba(255,255,255,.15);
-  text-shadow:2px 2px 0 #2f5228;
-  letter-spacing:12px;
-}
-
-/* ── 칩/배지 ── */
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{
-  background:#fff;border:2px solid #d4aa70;
-  border-radius:999px;padding:8px 14px;font-size:.95em;
-  font-weight:700;color:#5c3d1e;
-  box-shadow:0 3px 0 #c9a96e;
-}
-.chip.me{background:#ff8c42;border-color:#c45e1a;color:#fff;box-shadow:0 3px 0 #c45e1a}
-
-/* ── 게임 레이아웃 ── */
-.game-layout{display:grid;grid-template-columns:1.65fr 1fr;gap:14px;align-items:start}
-
-/* ── 칠판 캔버스 ── */
-canvas{
-  width:100%;
-  background:#2d5a27;
-  border-radius:18px;
-  box-shadow:0 0 0 10px #5c3d1e, 0 0 0 13px #8b6343, 0 12px 30px rgba(0,0,0,.25);
-  touch-action:none;
-  min-height:420px;
-  display:block;
-}
-
-/* ── 툴바 (분필 느낌) ── */
-.toolbar{
-  display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;
-  background:linear-gradient(135deg,#f5e6c8,#ede0c4);
-  border-radius:16px;padding:12px 14px;
-  border:2px solid #c9a96e;
-  box-shadow:0 4px 0 #b0996a;
-}
-.color-dot{
-  width:36px;height:36px;border-radius:50%;
-  border:4px solid transparent;cursor:pointer;
-  box-shadow:0 3px 6px rgba(0,0,0,.2);
-  transition:transform .12s;
-}
-.color-dot:hover{transform:scale(1.15)}
-.color-dot.active{border-color:#3d2c1e;transform:scale(1.2)}
-
-/* ── 채팅박스 (칠판 노트 느낌) ── */
-.chat-box{
-  height:360px;overflow:auto;
-  background:#fffdf4;
-  border-radius:16px;padding:14px;
-  box-shadow:inset 0 2px 10px rgba(0,0,0,.07);
-  border:2.5px solid #d4aa70;
-  background-image:repeating-linear-gradient(transparent,transparent 31px,#f0e4c4 31px,#f0e4c4 32px);
-  background-attachment:local;
-}
-.msg{margin-bottom:10px;line-height:1.5;font-size:.95em}
-.msg .name{font-weight:700;color:#4a7c3f;font-family:'Jua',sans-serif}
-.msg.system{color:#8b7355;font-style:italic;font-size:.88em}
-.msg.correct{
-  background:linear-gradient(135deg,#fff9c4,#fff3aa);
-  border-radius:10px;padding:6px 10px;
-  border-left:4px solid #f4c430;
-  font-weight:700;color:#5c3d1e;
-}
-
-/* ── 정답 입력 ── */
-.answer-row{display:flex;gap:8px;margin-top:10px}
-.answer-row input{margin-bottom:0;font-size:1.05em}
-
-/* ── 점수판 ── */
-.score-list{display:flex;flex-wrap:wrap;gap:8px}
-.score-item{
-  background:#fff;border:2px solid #d4aa70;
-  padding:6px 12px;border-radius:12px;font-size:.9em;
-  font-weight:700;color:#5c3d1e;
-  box-shadow:0 3px 0 #c9a96e;
-}
-
-/* ── 통계 ── */
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.stat{
-  background:linear-gradient(160deg,#fffdf4,#fdf3dc);
-  border-radius:18px;padding:18px;text-align:center;
-  box-shadow:0 6px 0 #c9a96e,0 8px 20px rgba(0,0,0,.1);
-  border:2.5px solid #d4aa70;
-}
-.stat .num{font-size:2.4em;font-weight:800;color:#ff8c42;font-family:'Jua',sans-serif}
-
-/* ── 배너 (제시어) ── */
-.banner{
-  background:linear-gradient(135deg,#e8f5e1,#d4edd0);
-  border:2.5px solid #5aac44;
-  border-radius:16px;padding:14px;margin-bottom:10px;
-  box-shadow:0 4px 0 #3a7a2c;
-}
-
-/* ── 헤더 카드 (게임 상단 정보) ── */
-#screenGame .card:first-child{
-  background:linear-gradient(135deg,#3d5a2c,#4a7c3f);
-  color:#fff;border-color:#2f5228;
-  box-shadow:0 6px 0 #1e3a1a;
-}
-#screenGame .card:first-child strong{color:#b5e48c}
-#screenGame .card:first-child .score-item{
-  background:rgba(255,255,255,.15);
-  border-color:rgba(255,255,255,.3);
-  color:#fff;
-  box-shadow:none;
-}
-#timerDisplay{
-  font-family:'Jua',sans-serif;font-size:1.4em;
-  background:#ff8c42;color:#fff;
-  border-radius:10px;padding:2px 10px;
-  box-shadow:0 3px 0 #c45e1a;
-  display:inline-block;
-}
-
-/* ── 숨김 / 유틸 ── */
+/* 레이아웃 */
+.grid-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}
+.small{font-size:.88em;color:var(--muted);margin-top:6px}
 .hidden{display:none!important}
-.small{font-size:.88em;color:#8b7355;margin-top:4px}
 
-/* ── 결과 아이템 ── */
+/* 로비 */
+.lobby{width:100%;max-width:520px;text-align:center}
+.lobby-board{
+  background:var(--board);color:#f2efe6;
+  border:8px solid var(--board-frame);border-radius:var(--radius);
+  padding:48px 24px;margin-bottom:28px;
+}
+.lobby-board h1{font-size:3em;line-height:1.15}
+.lobby-sub{margin:0 0 10px;font-weight:300;color:#bcd3c0;letter-spacing:.12em}
+.role-buttons{display:grid;gap:10px}
+.role-buttons button{padding:16px;font-size:1.1em}
+
+/* 통계 */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center}
+.stat .num{font-size:2em;font-weight:300;color:var(--accent);line-height:1.2}
+.stat-label{font-size:.88em;color:var(--muted)}
+
+/* 학생 참여 */
+.join-card{width:100%;max-width:440px}
+
+/* 대기실 */
+.waiting-card{width:100%;max-width:520px;text-align:center}
+.room-code{
+  font-size:3.4em;font-weight:300;letter-spacing:.3em;text-indent:.3em;
+  background:var(--board);color:#f2efe6;border-radius:var(--radius);
+  padding:14px 20px;margin:12px 0;
+}
+.copy-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.qr-wrap{margin:20px 0 4px}
+.qr-box{display:inline-block;background:#fff;padding:10px;border:1px solid var(--line);border-radius:6px;line-height:0}
+.qr-box img{width:168px;height:168px;image-rendering:pixelated}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:22px 0 10px}
+.chip{background:#fff;border:1px solid var(--line-strong);border-radius:6px;padding:6px 12px;font-size:.95em}
+.chip.me{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chip .role{color:var(--muted);font-size:.85em;margin-right:4px}
+.chip.me .role{color:#cfc6b8}
+.waiting-status{color:var(--muted);margin:6px 0 16px}
+
+/* 게임 상단 */
+.game-header{
+  background:var(--board);color:#f2efe6;border-radius:var(--radius);
+  padding:16px 20px;margin-bottom:16px;
+}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 28px}
+.meta-label{color:#a9c2ae;font-size:.85em;margin-right:8px}
+#timerDisplay{font-variant-numeric:tabular-nums;font-size:1.25em;font-weight:300}
+.game-header .btn-quiet{margin-left:auto;border-color:rgba(255,255,255,.35);color:#f2efe6}
+.game-header .btn-quiet:hover{border-color:#fff}
+.score-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.score-list:empty{display:none}
+.score-item{background:rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:.88em}
+.score-item .pts{color:#f2c9bd;margin-left:6px}
+
+.game-layout{display:grid;grid-template-columns:1.65fr 1fr;gap:16px;align-items:start}
+
+/* 제시어 안내 */
+.banner{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin-bottom:12px}
+#wordBanner{font-size:1.05em}
+#keywordDisplay{font-size:1.4em;font-weight:400;color:var(--accent);margin-left:8px}
+
+/* 칠판 */
+canvas{
+  width:100%;display:block;min-height:420px;
+  background:var(--board);
+  border:8px solid var(--board-frame);border-radius:var(--radius);
+  touch-action:none;
+}
+
+/* 도구 */
+.toolbar{
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;
+}
+.palette{display:flex;gap:8px;flex-wrap:wrap}
+.tool-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.tool-buttons button{padding:8px 14px}
+.color-dot{width:32px;height:32px;border-radius:6px;cursor:pointer;border:2px solid var(--line);outline:2px solid transparent;outline-offset:2px}
+.color-dot.active{outline-color:var(--ink)}
+
+/* 채팅 */
+.side-card{padding:16px}
+.notice{background:var(--green-soft);border-color:#c5d6c8;color:var(--green)}
+.chat-box{
+  height:360px;overflow:auto;margin-bottom:12px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;
+}
+.msg{margin-bottom:8px;line-height:1.5;font-size:.95em}
+.msg .name{color:var(--green);margin-right:6px}
+.msg.system{color:var(--muted);font-size:.88em}
+.msg.correct{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px}
+.answer-row{display:flex;gap:8px}
+.answer-row input{margin-bottom:0;min-width:0}
+.answer-row button{flex-shrink:0;white-space:nowrap}
+
+/* 결과 */
 .result-item{
   display:flex;justify-content:space-between;align-items:center;
-  background:linear-gradient(135deg,#fffdf4,#fdf3dc);
-  border-radius:16px;padding:16px 20px;margin-bottom:10px;
-  box-shadow:0 6px 0 #c9a96e;border:2.5px solid #d4aa70;
-  font-family:'Jua',sans-serif;font-size:1.1em;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 18px;margin-bottom:8px;font-size:1.1em;
 }
+.result-item .rank{color:var(--muted);margin-right:12px;font-variant-numeric:tabular-nums}
+.result-item:first-of-type{border-color:var(--accent)}
+.badge-line{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.badge-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.badge-card .badge-title{color:var(--muted);font-size:.88em}
+.badge-card .badge-name{font-size:1.2em;margin:2px 0}
+#resultList h3{margin-top:24px}
+#resultList h3:first-child{margin-top:0}
 
-/* ── 배지 라인 ── */
-.badge-line{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
-.badge-card{
-  background:linear-gradient(135deg,#fff9c4,#fff3aa);
-  border:2.5px solid #f4c430;border-radius:16px;
-  padding:12px 16px;flex:1;min-width:180px;
-  box-shadow:0 5px 0 #c9a200;
-  font-family:'Jua',sans-serif;
-}
+/* 규칙 안내 */
+.overlay{position:fixed;inset:0;background:rgba(30,26,20,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+.modal{background:var(--surface);width:min(560px,100%);border-radius:var(--radius);padding:28px}
+.modal h3{font-size:1.5em;font-weight:300;margin-bottom:16px}
+.modal p{margin:0 0 8px;line-height:1.6}
+.countdown{font-size:1.6em;font-weight:300;color:var(--accent);text-align:center;margin-top:18px}
 
-/* ── 푸터 ── */
-.footer-credit{text-align:center;font-size:.8em;color:#8b7355;padding:18px 0 8px}
-
-/* ── 오버레이 / 모달 ── */
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(30,20,10,.65);
-  display:flex;align-items:center;justify-content:center;
-  z-index:9999;padding:20px;
-}
-.overlay.hidden{display:none}
-.modal{
-  background:linear-gradient(160deg,#fffdf4,#fdf3dc);
-  width:min(680px,100%);border-radius:24px;padding:28px;
-  box-shadow:0 8px 0 #c9a96e,0 16px 40px rgba(0,0,0,.3);
-  border:3px solid #d4aa70;
-}
-.modal h3{color:#4a7c3f;font-size:1.5em;margin-bottom:14px;font-family:'Jua',sans-serif}
-.modal p{margin:0 0 10px;line-height:1.6;color:#5c3d1e}
-.countdown{font-size:2em;font-weight:800;color:#ff8c42;text-align:center;margin-top:10px;font-family:'Jua',sans-serif}
-
-/* ── 팝업 ── */
+/* 가운데 팝업 */
 .center-popup{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:10000;
-  background:linear-gradient(160deg,#fffdf4,#fdf3dc);
-  border:5px solid #ff8c42;border-radius:28px;
-  padding:30px 36px;min-width:300px;text-align:center;
-  box-shadow:0 10px 0 #c45e1a,0 18px 50px rgba(0,0,0,.3);
-  animation:popIn .25s cubic-bezier(.34,1.56,.64,1);
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10000;
+  background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius);
+  padding:28px 36px;min-width:280px;max-width:calc(100% - 32px);text-align:center;
+  box-shadow:0 12px 40px rgba(0,0,0,.18);
+  animation:popIn .2s ease-out;
 }
-@keyframes popIn{from{transform:translate(-50%,-50%) scale(.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
-.center-popup.hidden{display:none}
-.center-popup .big{font-size:2.2em;font-weight:800;color:#ff8c42;margin-bottom:10px;font-family:'Jua',sans-serif}
-.center-popup .sub{font-size:1.1em;color:#5c3d1e;font-weight:700}
+.center-popup.fail{border-color:var(--danger)}
+.center-popup .big{font-size:2em;font-weight:300;color:var(--accent);margin-bottom:6px}
+.center-popup.fail .big{color:var(--danger)}
+.center-popup .sub{color:var(--ink)}
+@keyframes popIn{from{transform:translate(-50%,-50%) scale(.94);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
-/* ── 로비 특별 스타일 ── */
-#screenLobby{
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ctext y='50' font-size='40'%3E🌿%3C/text%3E%3C/svg%3E") left 10px top 10px/60px no-repeat,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ctext y='50' font-size='40'%3E🍎%3C/text%3E%3C/svg%3E") right 10px top 10px/60px no-repeat,
-    linear-gradient(180deg,#c8e6c9 0%,#f0f7e6 40%,#e8d5b0 100%);
+/* 알림 */
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:10001;
+  width:max-content;max-width:min(520px,calc(100% - 32px));
+  background:var(--ink);color:var(--surface);border-radius:var(--radius);
+  padding:14px 18px;white-space:pre-line;line-height:1.55;cursor:pointer;
+  box-shadow:0 8px 30px rgba(0,0,0,.2);
 }
-#screenLobby .card{
-  text-align:center;padding:48px 28px;
-  background:linear-gradient(160deg,#fffdf4 0%,#fdf3dc 100%);
-  border:3px solid #d4aa70;
-  max-width:520px;margin:0 auto;
-}
-/* 칠판 느낌 타이틀 박스 */
-.lobby-board{
-  background:#2d5a27;
-  border-radius:18px;padding:22px 28px;
-  box-shadow:0 0 0 8px #5c3d1e,0 0 0 11px #8b6343,0 12px 30px rgba(0,0,0,.2);
-  margin-bottom:28px;display:inline-block;width:100%;
-}
-.lobby-board h1{color:#fff;font-size:2.8em;margin:0;text-shadow:2px 3px 0 #1a3a17}
-.lobby-board p{color:#b5e48c;font-family:'Jua',sans-serif;font-size:1.3em;margin:8px 0 0}
+.toast.error{background:var(--danger)}
 
-/* ── 대기실 방 코드 영역 ── */
-#screenWaiting .card{text-align:center}
+.footer-credit{text-align:center;font-size:.8em;color:var(--muted);padding:20px 0 8px}
 
-/* ── 모바일 대응 ── */
+/* 작은 화면 */
 @media(max-width:900px){
-  .grid-2,.grid-4,.game-layout,.stats{grid-template-columns:1fr}
+  .game-layout,.grid-3,.badge-line{grid-template-columns:1fr}
   .chat-box{height:220px}
-  canvas{min-height:300px}
-  h1{font-size:2em}
-  .room-code{font-size:32px}
+  canvas{min-height:260px;border-width:6px}
+  .lobby-board h1{font-size:2.3em}
+  .room-code{font-size:2.4em}
+  .game-header .btn-quiet{margin-left:0}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr}
 }
 
-/* ── 교사 모니터 ── */
-#teacherMonitor{background:linear-gradient(135deg,#e8f5e1,#d4edd0);border-color:#5aac44}
-
-/* ── 스크롤바 ── */
 ::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:#f0e4c4;border-radius:8px}
-::-webkit-scrollbar-thumb{background:#c9a96e;border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:4px}
