@@ -1,13 +1,13 @@
-/* 문막초 달반체: fonts/ 폴더에 파일을 넣으면 적용됨 */
+/* 문막초 달반체: fonts/MunmakDalban.ttf (원본 그대로) */
 @font-face{
   font-family:'MunmakDalban';
-  src:url('fonts/MunmakDalban.woff2') format('woff2'),url('fonts/MunmakDalban.woff') format('woff'),url('fonts/MunmakDalban.ttf') format('truetype'),url('fonts/MunmakDalban.otf') format('opentype');
+  src:url('fonts/MunmakDalban.ttf') format('truetype');
   font-weight:400;font-display:swap;
 }
-/* 문막초 해반체: 나머지 모든 글자. fonts/MunmakHaeban.* 파일을 넣으면 적용됨 */
+/* 문막초 해반체: 나머지 모든 글자. fonts/MunmakHaeban.ttf (원본 그대로) */
 @font-face{
   font-family:'MunmakHaeban';
-  src:url('fonts/MunmakHaeban.woff2') format('woff2'),url('fonts/MunmakHaeban.woff') format('woff'),url('fonts/MunmakHaeban.ttf') format('truetype'),url('fonts/MunmakHaeban.otf') format('opentype');
+  src:url('fonts/MunmakHaeban.ttf') format('truetype');
   font-weight:400;font-display:swap;
 }
 /* 나는야 피카소 — 교실 버전 디자인 (DESIGN.md 참고)
@@ -163,7 +163,7 @@ button:disabled{opacity:.45;cursor:default}
 .lobby-board .tray{margin:44px -24px 0;height:22px}
 .lobby-title{font-family:'MunmakDalban',var(--chalk-font);font-weight:400;line-height:1.05}
 .lobby-title-sub{display:block;font-size:1.9rem;color:var(--chalk-soft);margin-bottom:10px}
-.lobby-title-main{display:block;font-size:5.2rem}
+.lobby-title-main{display:block;font-size:4.1rem;white-space:nowrap}
 .role-buttons{display:grid;gap:10px}
 .role-buttons button{padding:16px;font-size:1.1em;min-height:56px}
 .how-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:32px}
@@ -318,7 +318,7 @@ canvas{
   h2{font-size:2.5em}
   .chat-box{height:210px}
   canvas{min-height:260px;border-width:6px;border-bottom:0}
-  .lobby-title-main{font-size:3.2rem}
+  .lobby-title-main{font-size:2.5rem}
   .lobby-title-sub{font-size:1.4rem}
   .room-code{font-size:3.4em}
   #timerDisplay{font-size:1.8em}
