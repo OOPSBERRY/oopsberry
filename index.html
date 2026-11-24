@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
 <title>나는야 피카소</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" />
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 </head>
@@ -15,9 +17,11 @@
 <section class="screen active" id="screenLobby">
   <div class="wrap center">
     <div class="lobby">
-      <div class="lobby-board">
-        <p class="lobby-sub">그림으로 말해요</p>
-        <h1>나는야 피카소</h1>
+      <div class="lobby-board chalkboard">
+        <div class="board-date chalk" id="boardDate"></div>
+        <p class="lobby-sub chalk">오늘의 활동 · 그림으로 말해요</p>
+        <h1 class="chalk">나는야 피카소</h1>
+        <div class="tray"><span class="chalk-piece"></span><span class="chalk-piece pink"></span><span class="eraser"></span></div>
       </div>
       <div class="role-buttons">
         <button class="btn-primary" onclick="selectRole('teacher')">교사로 시작</button>
@@ -75,7 +79,7 @@
   <div class="card waiting-card">
     <h2>대기실</h2>
     <p class="small">이 코드를 학생들에게 알려 주세요.</p>
-    <div class="room-code" id="waitingRoomCode">----</div>
+    <div class="room-code chalkboard" id="waitingRoomCode">----</div>
     <div class="copy-row">
       <button class="btn-quiet" onclick="copyRoomCode()">코드 복사</button>
       <button class="btn-quiet" onclick="copyJoinLink()">참여 링크 복사</button>
@@ -97,7 +101,7 @@
 <!-- 게임 -->
 <section class="screen" id="screenGame"><div class="wrap">
 
-  <div class="game-header">
+  <div class="game-header chalkboard">
     <div class="meta">
       <div><span class="meta-label">라운드</span><span id="curRound">1</span> / <span id="totalRound">1</span></div>
       <div><span class="meta-label">출제자</span><span id="drawerNameMini">-</span></div>
@@ -115,10 +119,12 @@
         <div id="watchBanner"><span id="drawerNameDisplay">-</span> 학생이 그리는 중이에요. 무엇인지 맞혀 보세요.</div>
       </div>
 
-      <canvas id="drawCanvas" width="900" height="540"></canvas>
+      <div class="board-wrap">
+        <canvas id="drawCanvas" width="900" height="540"></canvas>
+        <div class="tray board-tray"><div id="colorPalette" class="palette hidden"></div></div>
+      </div>
 
       <div class="toolbar hidden" id="toolBox">
-        <div id="colorPalette" class="palette"></div>
         <div class="tool-buttons">
           <button class="btn-quiet" onclick="undoCanvas()">되돌리기</button>
           <button class="btn-quiet" id="eraserBtn" onclick="toggleEraser()">지우개</button>
@@ -134,9 +140,9 @@
         <div class="small">정답이 나오면 5초 뒤 다음 라운드로 넘어가요.</div>
       </div>
 
-      <div class="chat-box" id="chatBox"></div>
+      <div class="notebook"><div class="notebook-title">우리 반 정답 공책</div><div class="chat-box" id="chatBox"></div></div>
 
-      <div id="drawerNotice" class="card side-card notice hidden">
+      <div id="drawerNotice" class="sticky-note hidden">
         지금은 내가 그릴 차례예요. 글자 없이 그림으로만 설명해요.
       </div>
 

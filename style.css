@@ -15,6 +15,7 @@
   --green-soft:#e3ece4;
   --danger:#b3362b;
   --radius:8px;
+  --chalk-font:'Nanum Pen Script','Pretendard',cursive;
   --font:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
 }
 
@@ -85,15 +86,30 @@ button:disabled{opacity:.45;cursor:default}
 .small{font-size:.88em;color:var(--muted);margin-top:6px}
 .hidden{display:none!important}
 
+/* 칠판 공통 */
+.chalk{font-family:var(--chalk-font);font-weight:400}
+.chalkboard{
+  background-color:var(--board);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.tray{background:var(--board-frame);height:16px;display:flex;align-items:flex-end;gap:10px;padding:0 18px 3px;border-top:3px solid #4a3828}
+.board-wrap{margin-bottom:0}
+.board-tray{height:auto;min-height:24px;padding:8px 14px 6px;border-radius:0 0 var(--radius) var(--radius)}
+.chalk-piece{width:40px;height:9px;background:#f2efe6;border-radius:2px}
+.chalk-piece.pink{background:#f2b8c6;width:28px}
+.eraser{width:54px;height:14px;background:#3a3a3a;border-top:5px solid #b9a27e;border-radius:2px;margin-left:auto}
+.board-date{position:absolute;top:12px;right:18px;font-size:1.35em;color:#cfe0d2}
+
 /* 로비 */
 .lobby{width:100%;max-width:520px;text-align:center}
 .lobby-board{
-  background:var(--board);color:#f2efe6;
-  border:8px solid var(--board-frame);border-radius:var(--radius);
-  padding:48px 24px;margin-bottom:28px;
+  color:#f2efe6;
+  border:10px solid var(--board-frame);border-bottom:0;border-radius:var(--radius) var(--radius) 0 0;
+  padding:56px 24px 0;margin-bottom:28px;position:relative;
 }
-.lobby-board h1{font-size:4.4em;line-height:1.1}
-.lobby-sub{margin:0 0 14px;font-weight:300;color:#bcd3c0;letter-spacing:.12em;font-size:1.15em}
+.lobby-board .tray{margin:44px -24px 0;height:22px}
+.lobby-board h1{font-size:5.6em;line-height:1;font-weight:400}
+.lobby-sub{margin:0 0 10px;color:#cfe0d2;font-size:1.6em}
 .role-buttons{display:grid;gap:10px}
 .role-buttons button{padding:16px;font-size:1.1em}
 
@@ -110,23 +126,24 @@ button:disabled{opacity:.45;cursor:default}
 .waiting-card{width:100%;max-width:520px;text-align:center}
 .room-code{
   font-size:6em;line-height:1.1;font-weight:300;letter-spacing:.25em;text-indent:.25em;
-  background:var(--board);color:#f2efe6;border-radius:var(--radius);
-  padding:14px 20px;margin:12px 0;
+  color:#f2efe6;border-radius:var(--radius);
+  border:8px solid var(--board-frame);
+  padding:10px 20px;margin:12px 0;
 }
 .copy-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .qr-wrap{margin:20px 0 4px}
 .qr-box{display:inline-block;background:#fff;padding:10px;border:1px solid var(--line);border-radius:6px;line-height:0}
 .qr-box img{width:168px;height:168px;image-rendering:pixelated}
 .chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:22px 0 10px}
-.chip{background:#fff;border:1px solid var(--line-strong);border-radius:6px;padding:6px 12px;font-size:.95em}
-.chip.me{background:var(--ink);border-color:var(--ink);color:var(--surface)}
-.chip .role{color:var(--muted);font-size:.85em;margin-right:4px}
-.chip.me .role{color:#cfc6b8}
+.chip{background:#fff;border:1px solid var(--line-strong);border-top:5px solid var(--accent);border-radius:4px;padding:8px 14px;font-size:1em;min-width:72px}
+.chip.teacher{border-top-color:var(--board-frame)}
+.chip.me{background:var(--accent-soft)}
+.chip .role{display:block;color:var(--muted);font-size:.72em;line-height:1.2}
 .waiting-status{color:var(--muted);margin:6px 0 16px}
 
 /* 게임 상단 */
 .game-header{
-  background:var(--board);color:#f2efe6;border-radius:var(--radius);
+  color:#f2efe6;border-radius:var(--radius);
   padding:16px 20px;margin-bottom:16px;
 }
 .meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 36px;font-size:1.15em}
@@ -151,7 +168,7 @@ button:disabled{opacity:.45;cursor:default}
 canvas{
   width:100%;display:block;min-height:420px;
   background:var(--board);
-  border:8px solid var(--board-frame);border-radius:var(--radius);
+  border:10px solid var(--board-frame);border-bottom:0;border-radius:var(--radius) var(--radius) 0 0;
   touch-action:none;
 }
 
@@ -160,23 +177,30 @@ canvas{
   display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;
   margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;
 }
-.palette{display:flex;gap:8px;flex-wrap:wrap}
+.palette{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .tool-buttons{display:flex;gap:8px;flex-wrap:wrap}
 .tool-buttons button{padding:8px 14px}
-.color-dot{width:32px;height:32px;border-radius:6px;cursor:pointer;border:2px solid var(--line);outline:2px solid transparent;outline-offset:2px}
-.color-dot.active{outline-color:var(--ink)}
+.color-dot{width:46px;height:14px;border-radius:3px;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.25);transition:transform .12s}
+.color-dot:hover{transform:translateY(-2px)}
+.color-dot.active{transform:translateY(-6px);box-shadow:0 2px 0 rgba(0,0,0,.25),0 0 0 2px #f2efe6}
 
 /* 채팅 */
 .side-card{padding:16px}
-.notice{background:var(--green-soft);border-color:#c5d6c8;color:var(--green)}
+/* 포스트잇 */
+.sticky-note{background:#fbf1b8;color:#5a4a1e;padding:18px 18px 22px;margin:0 0 12px;font-family:var(--chalk-font);font-size:1.55em;line-height:1.3;box-shadow:0 6px 14px rgba(60,50,20,.12);border-radius:2px;transform:rotate(-1deg)}
+/* 공책 */
+.notebook{background:#fffef9;border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.notebook-title{font-family:var(--chalk-font);font-size:1.5em;color:var(--green);padding:8px 16px 4px 52px;border-bottom:2px solid #d9e4ef}
 .chat-box{
-  height:360px;overflow:auto;margin-bottom:12px;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;
+  height:330px;overflow:auto;padding:0 14px 0 52px;
+  background-color:#fffef9;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='30'%3E%3Crect y='29' width='8' height='1' fill='%23d9e4ef'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='8'%3E%3Crect width='1' height='8' fill='%23eab3a8'/%3E%3C/svg%3E");
+  background-repeat:repeat,repeat-y;background-position:0 0,38px 0;background-attachment:local,local;
 }
-.msg{margin-bottom:8px;line-height:1.5;font-size:.95em}
+.msg{line-height:30px;font-size:.95em;margin:0}
 .msg .name{color:var(--green);margin-right:6px}
 .msg.system{color:var(--muted);font-size:.88em}
-.msg.correct{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px}
+.msg.correct{background:#fbf1b8;border-radius:2px;padding:0 8px;margin-left:-8px}
 .answer-row{display:flex;gap:8px}
 .answer-row input{margin-bottom:0;min-width:0}
 .answer-row button{flex-shrink:0;white-space:nowrap}
@@ -190,7 +214,8 @@ canvas{
 .result-item .rank{color:var(--muted);margin-right:12px;font-variant-numeric:tabular-nums}
 .result-item:first-of-type{border-color:var(--accent)}
 .badge-line{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
-.badge-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.badge-card{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.stamp{position:absolute;right:12px;bottom:10px;width:72px;height:72px;white-space:pre-line;border:2px solid #c9483a;border-radius:50%;color:#c9483a;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--chalk-font);font-size:1.15em;line-height:1.05;padding:8px;transform:rotate(-14deg);opacity:.85}
 .badge-card .badge-title{color:var(--muted);font-size:.88em}
 .badge-card .badge-name{font-size:1.8em;font-weight:300;margin:2px 0}
 #resultList h3{margin-top:24px}
@@ -232,8 +257,8 @@ canvas{
 /* 작은 화면 */
 @media(max-width:900px){
   .game-layout,.grid-3,.badge-line{grid-template-columns:1fr}
-  .chat-box{height:220px}
-  canvas{min-height:260px;border-width:6px}
+  .chat-box{height:210px}
+  canvas{min-height:260px;border-width:6px;border-bottom:0}
   .lobby-board h1{font-size:2.8em}
   .room-code{font-size:3.4em}
   #timerDisplay{font-size:1.8em}
