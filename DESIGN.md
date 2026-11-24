@@ -23,8 +23,9 @@ colors:
   stamp: "#c9483a"         # 참 잘했어요 도장
 
 typography:
-  base: Pretendard (300, 400만 사용)
-  chalk: Nanum Pen Script 400 — 칠판 글씨, 포스트잇, 공책 제목, 도장에만
+  title: 문막초 달반체 — 로비 칠판 제목에만 (fonts/MunmakDalban.*)
+  base: 문막초 해반체 — 나머지 모든 글자 (fonts/MunmakHaeban.*), 파일이 없을 때는 Pretendard
+  note: 이 프로젝트는 사용자 요청으로 공통 규칙(Pretendard)의 예외
   display: 3.4em / 300 / line-height 1.05 / letter-spacing -0.035em
   eyebrow: 0.78em / 400 / letter-spacing 0.16em, 앞에 18px 가로선
 
