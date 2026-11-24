@@ -143,16 +143,10 @@ button:disabled{opacity:.45;cursor:default}
 .board-date{position:absolute;top:12px;right:18px;font-size:1.35em;color:var(--chalk-soft)}
 
 /* 포스트잇 */
-.note{
-  background:var(--block-yellow);border-radius:4px;padding:14px 14px 18px;
-  box-shadow:0 4px 16px rgba(40,35,20,.08);
-  font-family:var(--chalk-font);font-size:1.45em;line-height:1.2;text-align:left;
-}
 .note-lime{background:var(--block-lime);transform:rotate(-2deg)}
 .note-pink{background:var(--block-pink);transform:rotate(1.5deg)}
 .note-lilac{background:var(--block-lilac);transform:rotate(-1deg)}
 .note-mint{background:var(--block-mint);transform:rotate(1deg)}
-.note-num{display:block;font-family:var(--font);font-size:.5em;letter-spacing:.14em;color:#4f4a40;margin-bottom:4px}
 
 /* 로비 */
 .lobby{width:100%;max-width:560px;text-align:center}
