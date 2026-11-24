@@ -8,9 +8,9 @@
   --line-strong:#cbbfa8;
   --board:#2f4a3a;
   --board-frame:#5a4632;
-  --accent:#c4553b;
+  --accent:#2f6b4a;
   --accent-ink:#ffffff;
-  --accent-soft:#f6e3dc;
+  --accent-soft:#e1ece4;
   --green:#3d6b4f;
   --green-soft:#e3ece4;
   --danger:#b3362b;
@@ -69,7 +69,7 @@ button{
 }
 button:disabled{opacity:.45;cursor:default}
 .btn-primary{background:var(--accent);color:var(--accent-ink)}
-.btn-primary:hover:not(:disabled){background:#ad4931}
+.btn-primary:hover:not(:disabled){background:#24563b}
 .btn-line{background:transparent;border-color:var(--ink);color:var(--ink)}
 .btn-line:hover{background:var(--ink);color:var(--surface)}
 .btn-quiet{background:transparent;border-color:var(--line-strong);color:var(--ink)}
@@ -92,15 +92,15 @@ button:disabled{opacity:.45;cursor:default}
   border:8px solid var(--board-frame);border-radius:var(--radius);
   padding:48px 24px;margin-bottom:28px;
 }
-.lobby-board h1{font-size:3em;line-height:1.15}
-.lobby-sub{margin:0 0 10px;font-weight:300;color:#bcd3c0;letter-spacing:.12em}
+.lobby-board h1{font-size:4.4em;line-height:1.1}
+.lobby-sub{margin:0 0 14px;font-weight:300;color:#bcd3c0;letter-spacing:.12em;font-size:1.15em}
 .role-buttons{display:grid;gap:10px}
 .role-buttons button{padding:16px;font-size:1.1em}
 
 /* 통계 */
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center}
-.stat .num{font-size:2em;font-weight:300;color:var(--accent);line-height:1.2}
+.stat .num{font-size:2.6em;font-weight:300;color:var(--accent);line-height:1.2}
 .stat-label{font-size:.88em;color:var(--muted)}
 
 /* 학생 참여 */
@@ -109,7 +109,7 @@ button:disabled{opacity:.45;cursor:default}
 /* 대기실 */
 .waiting-card{width:100%;max-width:520px;text-align:center}
 .room-code{
-  font-size:3.4em;font-weight:300;letter-spacing:.3em;text-indent:.3em;
+  font-size:6em;line-height:1.1;font-weight:300;letter-spacing:.25em;text-indent:.25em;
   background:var(--board);color:#f2efe6;border-radius:var(--radius);
   padding:14px 20px;margin:12px 0;
 }
@@ -129,22 +129,23 @@ button:disabled{opacity:.45;cursor:default}
   background:var(--board);color:#f2efe6;border-radius:var(--radius);
   padding:16px 20px;margin-bottom:16px;
 }
-.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 28px}
+.meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 36px;font-size:1.15em}
 .meta-label{color:#a9c2ae;font-size:.85em;margin-right:8px}
-#timerDisplay{font-variant-numeric:tabular-nums;font-size:1.25em;font-weight:300}
-.game-header .btn-quiet{margin-left:auto;border-color:rgba(255,255,255,.35);color:#f2efe6}
+#timerDisplay{font-variant-numeric:tabular-nums;font-size:2.4em;line-height:1;font-weight:300}
+#timerDisplay.urgent{color:#f2b8a8}
+.game-header .btn-quiet{margin-left:auto;align-self:center;font-size:.8em;border-color:rgba(255,255,255,.35);color:#f2efe6}
 .game-header .btn-quiet:hover{border-color:#fff}
 .score-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .score-list:empty{display:none}
 .score-item{background:rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:.88em}
-.score-item .pts{color:#f2c9bd;margin-left:6px}
+.score-item .pts{color:#bfe0c9;margin-left:6px}
 
 .game-layout{display:grid;grid-template-columns:1.65fr 1fr;gap:16px;align-items:start}
 
 /* 제시어 안내 */
 .banner{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin-bottom:12px}
 #wordBanner{font-size:1.05em}
-#keywordDisplay{font-size:1.4em;font-weight:400;color:var(--accent);margin-left:8px}
+#keywordDisplay{font-size:2.6em;line-height:1.1;font-weight:400;color:var(--accent);margin-left:12px;vertical-align:middle}
 
 /* 칠판 */
 canvas{
@@ -184,14 +185,14 @@ canvas{
 .result-item{
   display:flex;justify-content:space-between;align-items:center;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  padding:14px 18px;margin-bottom:8px;font-size:1.1em;
+  padding:18px 22px;margin-bottom:8px;font-size:1.5em;font-weight:300;
 }
 .result-item .rank{color:var(--muted);margin-right:12px;font-variant-numeric:tabular-nums}
 .result-item:first-of-type{border-color:var(--accent)}
 .badge-line{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
 .badge-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
 .badge-card .badge-title{color:var(--muted);font-size:.88em}
-.badge-card .badge-name{font-size:1.2em;margin:2px 0}
+.badge-card .badge-name{font-size:1.8em;font-weight:300;margin:2px 0}
 #resultList h3{margin-top:24px}
 #resultList h3:first-child{margin-top:0}
 
@@ -200,20 +201,20 @@ canvas{
 .modal{background:var(--surface);width:min(560px,100%);border-radius:var(--radius);padding:28px}
 .modal h3{font-size:1.5em;font-weight:300;margin-bottom:16px}
 .modal p{margin:0 0 8px;line-height:1.6}
-.countdown{font-size:1.6em;font-weight:300;color:var(--accent);text-align:center;margin-top:18px}
+.countdown{font-size:3.4em;line-height:1.2;font-weight:300;color:var(--accent);text-align:center;margin-top:18px}
 
 /* 가운데 팝업 */
 .center-popup{
   position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10000;
   background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius);
-  padding:28px 36px;min-width:280px;max-width:calc(100% - 32px);text-align:center;
+  padding:36px 56px;min-width:320px;max-width:calc(100% - 32px);text-align:center;
   box-shadow:0 12px 40px rgba(0,0,0,.18);
   animation:popIn .2s ease-out;
 }
 .center-popup.fail{border-color:var(--danger)}
-.center-popup .big{font-size:2em;font-weight:300;color:var(--accent);margin-bottom:6px}
+.center-popup .big{font-size:4.2em;line-height:1.1;font-weight:300;color:var(--accent);margin-bottom:10px}
 .center-popup.fail .big{color:var(--danger)}
-.center-popup .sub{color:var(--ink)}
+.center-popup .sub{color:var(--ink);font-size:1.4em;font-weight:300}
 @keyframes popIn{from{transform:translate(-50%,-50%) scale(.94);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
 /* 알림 */
@@ -233,8 +234,13 @@ canvas{
   .game-layout,.grid-3,.badge-line{grid-template-columns:1fr}
   .chat-box{height:220px}
   canvas{min-height:260px;border-width:6px}
-  .lobby-board h1{font-size:2.3em}
-  .room-code{font-size:2.4em}
+  .lobby-board h1{font-size:2.8em}
+  .room-code{font-size:3.4em}
+  #timerDisplay{font-size:1.8em}
+  #keywordDisplay{font-size:1.9em}
+  .center-popup{padding:28px 24px}
+  .center-popup .big{font-size:2.8em}
+  .countdown{font-size:2.6em}
   .game-header .btn-quiet{margin-left:0}
 }
 @media(max-width:480px){
