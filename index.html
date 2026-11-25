@@ -140,6 +140,10 @@
         <p class="eyebrow">선생님 메모</p>
         <div id="teacherMonitorContent" class="small"></div>
         <div class="small">정답이 나오면 5초 뒤 다음 라운드로 넘어가요.</div>
+        <div class="teacher-actions">
+          <button class="btn-quiet" id="skipRoundBtn" onclick="skipRound()">이번 문제 넘기기</button>
+          <button class="btn-quiet btn-danger-line" id="endGameBtn" onclick="endGameNow()">게임 바로 끝내기</button>
+        </div>
       </div>
 
       <div class="notebook"><div class="notebook-title">우리 반 정답 공책</div><div class="chat-box" id="chatBox"></div></div>
